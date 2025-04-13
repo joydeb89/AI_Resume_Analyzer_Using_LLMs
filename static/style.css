@@ -1,0 +1,158 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #8f9db9;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* === Container Wrapper === */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 900px;
+    padding: 20px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* === Card (Box) === */
+.card {
+    background-color: #a4ddf2;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+}
+
+.card h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #333;
+    text-align: center;
+}
+
+.card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+/* === Form Fields === */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="file"],
+form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+}
+
+form textarea {
+    resize: vertical;
+}
+
+/* === Submit Button === */
+form button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+form button[type="submit"]:hover {
+    background-color: #4338ca;
+}
+
+/* === Remember Me === */
+.remember {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.remember input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* === Flash Messages === */
+.flash-message {
+    font-size: 14px;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.flash-message.success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.flash-message.error {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.flash-message.info {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+/* === Sign-in Link === */
+.signin-link {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.signin-link a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signin-link a:hover {
+    text-decoration: underline;
+}
+
+/* === Results Section (for dashboard) === */
+.results {
+    margin-top: 30px;
+}
+
+.results h3,
+.results h4 {
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.results ul {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.results li {
+    margin-bottom: 6px;
+    color: #444;
+}

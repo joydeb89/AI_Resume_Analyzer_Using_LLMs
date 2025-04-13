@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Page Title -->
+        <h1 class="page-title">AI Resume Analyzer Using LLMs</h1>
+
+        <div class="card">
+            <h2>Welcome, {{ username }} 👋</h2>
+            <p>Analyze your resume against a job description</p>
+
+            <!-- Resume Upload Form -->
+            <form method="POST" enctype="multipart/form-data">
+                <label for="resume">Upload Resume (PDF or DOCX):</label>
+                <input type="file" name="resume" id="resume" accept=".pdf,.docx" required>
+
+                <label for="jobDesc">Paste Job Description:</label>
+                <textarea name="jobDesc" id="jobDesc" rows="6" required></textarea>
+
+                <button type="submit">Analyze Resume</button>
+            </form>
+
+            <!-- Extracted Info -->
+            {% if details %}
+            <div class="results">
+                <h3>🧾 Extracted Resume Information</h3>
+                <ul>
+                    <li><strong>Name:</strong> {{ details.name or 'N/A' }}</li>
+                    <li><strong>Email:</strong> {{ details.email or 'N/A' }}</li>
+                    <li><strong>Phone:</strong> {{ details.phone or 'N/A' }}</li>
+                    <li><strong>LinkedIn:</strong>
+                        {% if details.linkedin %}
+                            <a href="{{ details.linkedin }}" target="_blank">{{ details.linkedin }}</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </li>
+                </ul>
+
+                <h4>🎓 Education / College:</h4>
+                <ul>
+                    {% for c in details.college %}
+                        <li>{{ c }}</li>
+                    {% endfor %}
+                    {% if not details.college %}<li>N/A</li>{% endif %}
+                </ul>
+                <!-- <h4>🎓 Education / College:</h4>
+                <ul>
+                    {% for edu in details.education %}
+                        <li>
+                            <strong>{{ edu.college }}</strong>
+                            {% if edu.duration %} ({{ edu.duration }}){% endif %}
+                            <br>
+                            {% if edu.degree %}📘 {{ edu.degree }}<br>{% endif %}
+                            {% if edu.grade %}🏅 {{ edu.grade.lstrip('◦').strip() }}{% endif %}
+                        </li>
+                    {% endfor %}
+                    {% if not details.education %}<li>N/A</li>{% endif %}
+                </ul> -->
+                
+
+
+                <!-- <h4>📁 Projects:</h4>
+                <ul>
+                    {% for p in details.projects %}
+                        <li>{{ p }}</li>
+                    {% endfor %}
+                    {% if not details.projects %}<li>N/A</li>{% endif %}
+                </ul> -->
+            <h4>📁 Projects:</h4>
+            <ul>
+                {% for project in details.projects %}
+                    <li>
+                        <strong>{{ project.title }}</strong>
+                        {% if project.duration %} ({{ project.duration }}){% endif %}
+                        <br>
+                        <em>Tools:</em> {{ project.tools or 'N/A' }}
+                        <ul>
+                            {% if project.bullets %}
+                                <li>{{ project.bullets[0] }}</li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                {% endfor %}
+                {% if not details.projects %}<li>N/A</li>{% endif %}
+            </ul>
+
+
+
+                <h4>🏅 Certifications:</h4>
+                <ul>
+                    {% for cert in details.certifications %}
+                        <li>{{ cert }}</li>
+                    {% endfor %}
+                    {% if not details.certifications %}<li>N/A</li>{% endif %}
+                </ul>
+                <!-- <h4>💼 Internships:</h4>
+                <ul>
+                    {% for intern in details.internships %}
+                        <li>{{ intern }}</li>
+                    {% endfor %}
+                    {% if not details.internships %}<li>N/A</li>{% endif %}
+                </ul> -->
+                <h4>💼 Internships:</h4>
+                <ul>
+                    {% for intern in details.internships %}
+                        <li>
+                            <strong>{{ intern.title }}</strong> {% if intern.company %} @ {{ intern.company }}{% endif %}
+                            <ul>
+                                {% if intern.bullets %}
+                                    <li>{{ intern.bullets[0] }}</li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                    {% if not details.internships %}<li>N/A</li>{% endif %}
+                </ul>
+                
+
+            </div>
+            {% endif %}
+
+            <!-- Resume Matching Result -->
+            {% if result %}
+            <div class="results">
+                <h3>📊 Resume Analysis</h3>
+                <p><strong>Match Score:</strong> {{ result.match_score }}%</p>
+
+                <h4>✅ Skills Found in Resume:</h4>
+                <ul>
+                    {% for skill in result.resume_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                    {% if not result.resume_skills %}<li>N/A</li>{% endif %}
+                </ul>
+
+                <h4>📋 Skills Required in Job Description:</h4>
+                <ul>
+                    {% for skill in result.jd_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                    {% if not result.jd_skills %}<li>N/A</li>{% endif %}
+                </ul>
+
+                <h4>⚠️ Missing Skills:</h4>
+                <ul>
+                    {% for skill in result.missing_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                    {% if not result.missing_skills %}<li>N/A</li>{% endif %}
+                </ul>
+
+                <h4>💡 Recommendations:</h4>
+                <ul>
+                    {% for rec in result.recommendations %}
+                        <li>{{ rec }}</li>
+                    {% endfor %}
+                    {% if not result.recommendations %}<li>N/A</li>{% endif %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <p class="signin-link">
+                <a href="{{ url_for('signout') }}">🚪 Sign out</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Ignore Python cache and virtual env
+__pycache__/
+venv/
+.env
+
+# Ignore database file
+database.db
+
+# Ignore temp resume uploads
+temp_uploads/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
