@@ -49,46 +49,24 @@
                     {% endfor %}
                     {% if not details.college %}<li>N/A</li>{% endif %}
                 </ul>
-                <!-- <h4>🎓 Education / College:</h4>
+                
+                 <h4>📁 Projects:</h4>
                 <ul>
-                    {% for edu in details.education %}
+                    {% for project in details.projects %}
                         <li>
-                            <strong>{{ edu.college }}</strong>
-                            {% if edu.duration %} ({{ edu.duration }}){% endif %}
+                            <strong>{{ project.title }}</strong>
+                            {% if project.duration %} ({{ project.duration }}){% endif %}
                             <br>
-                            {% if edu.degree %}📘 {{ edu.degree }}<br>{% endif %}
-                            {% if edu.grade %}🏅 {{ edu.grade.lstrip('◦').strip() }}{% endif %}
+                            <em>Tools:</em> {{ project.tools or 'N/A' }}
+                            <ul>
+                                {% if project.bullets %}
+                                    <li>{{ project.bullets[0] }}</li>
+                                {% endif %}
+                            </ul>
                         </li>
                     {% endfor %}
-                    {% if not details.education %}<li>N/A</li>{% endif %}
-                </ul> -->
-                
-
-
-                <!-- <h4>📁 Projects:</h4>
-                <ul>
-                    {% for p in details.projects %}
-                        <li>{{ p }}</li>
-                    {% endfor %}
                     {% if not details.projects %}<li>N/A</li>{% endif %}
-                </ul> -->
-            <h4>📁 Projects:</h4>
-            <ul>
-                {% for project in details.projects %}
-                    <li>
-                        <strong>{{ project.title }}</strong>
-                        {% if project.duration %} ({{ project.duration }}){% endif %}
-                        <br>
-                        <em>Tools:</em> {{ project.tools or 'N/A' }}
-                        <ul>
-                            {% if project.bullets %}
-                                <li>{{ project.bullets[0] }}</li>
-                            {% endif %}
-                        </ul>
-                    </li>
-                {% endfor %}
-                {% if not details.projects %}<li>N/A</li>{% endif %}
-            </ul>
+                </ul>
 
 
 
@@ -99,13 +77,7 @@
                     {% endfor %}
                     {% if not details.certifications %}<li>N/A</li>{% endif %}
                 </ul>
-                <!-- <h4>💼 Internships:</h4>
-                <ul>
-                    {% for intern in details.internships %}
-                        <li>{{ intern }}</li>
-                    {% endfor %}
-                    {% if not details.internships %}<li>N/A</li>{% endif %}
-                </ul> -->
+
                 <h4>💼 Internships:</h4>
                 <ul>
                     {% for intern in details.internships %}

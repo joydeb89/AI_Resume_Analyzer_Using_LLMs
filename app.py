@@ -12,7 +12,7 @@ conn = sqlite3.connect('database.db')
 cursor = conn.cursor()
 
 # Get user ID from DB using session user name
-cursor.execute("SELECT id FROM users WHERE name = ?", (session['user'],))
+#cursor.execute("SELECT id FROM users WHERE name = ?",(session['user']))
 user = cursor.fetchone()
 if user:
     user_id = user[0]
@@ -109,13 +109,55 @@ def Login():
     return render_template('Login.html')
 
 
+
+
+# @app.route('/dashboard', methods=['GET', 'POST'])
+# def dashboard():
+#     if 'user' not in session:
+#         return redirect('/Login')
+    
+#     result = None          
+#     details = None  
+
+#     if request.method == 'POST':
+#         resume = request.files['resume']
+#         jobDesc = request.form['jobDesc']
+
+#         if not resume or not jobDesc:
+#             flash("Please upload resume and paste job description", "error")
+#             return redirect('/dashboard')
+
+#         # Save uploaded file temporarily
+#         filename = secure_filename(resume.filename)
+#         upload_dir = 'temp_uploads'
+#         os.makedirs(upload_dir, exist_ok=True)
+#         file_path = os.path.join(upload_dir, filename)
+#         resume.save(file_path)
+
+#         try:
+#             resume_text = parse_resume(file_path)
+#             jd_text = parse_job_description(jobDesc)
+
+#             result = analyze_resume_job_match(resume_text, jd_text)
+#             details = extract_resume_details(resume_text)  # ✅ extract name, email, phone etc.
+#             os.remove(file_path)
+
+#             return render_template('dashboard.html',
+#                                    result=result,
+#                                    details=details,
+#                                    username=session['user'])
+
+#         except Exception as e:
+#             flash(f"Error during analysis: {e}", "error")
+#     return render_template("dashboard.html", result=result, details=details, username=session["user"])
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user' not in session:
         return redirect('/Login')
-    
-    result = None          
-    details = None  
+
+    result = None
+    details = None
 
     if request.method == 'POST':
         resume = request.files['resume']
@@ -125,7 +167,6 @@ def dashboard():
             flash("Please upload resume and paste job description", "error")
             return redirect('/dashboard')
 
-        # Save uploaded file temporarily
         filename = secure_filename(resume.filename)
         upload_dir = 'temp_uploads'
         os.makedirs(upload_dir, exist_ok=True)
@@ -133,24 +174,44 @@ def dashboard():
         resume.save(file_path)
 
         try:
+            # Parse and analyze resume
             resume_text = parse_resume(file_path)
             jd_text = parse_job_description(jobDesc)
-
             result = analyze_resume_job_match(resume_text, jd_text)
-            details = extract_resume_details(resume_text)  # ✅ extract name, email, phone etc.
+            details = extract_resume_details(resume_text)
             os.remove(file_path)
 
-            return render_template('dashboard.html',
-                                   result=result,
-                                   details=details,
-                                   username=session['user'])
+            # ✅ Save analysis to database
+            conn = sqlite3.connect('database.db')
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT id FROM users WHERE name = ?", (session['user'],))
+            user = cursor.fetchone()
+
+            if user:
+                user_id = user[0]
+                print("Saving resume analysis for user:", user_id)
+                print("Match Score:", result['match_score'])
+
+                cursor.execute('''
+                    INSERT INTO resume_analysis (user_id, match_score, resume_text, job_description)
+                    VALUES (?, ?, ?, ?)
+                ''', (user_id, result['match_score'], resume_text, jobDesc))
+                conn.commit()
+                print("Inserted into resume_analysis table ✅")
+            else:
+                print("❌ No user found with session name.")
+
+            conn.close()
 
         except Exception as e:
             flash(f"Error during analysis: {e}", "error")
+
     return render_template("dashboard.html", result=result, details=details, username=session["user"])
 
 
-    #return render_template('dashboard.html', username=session['user'])
+
+    # return render_template('dashboard.html', username=session['user'])
 
 
 @app.route('/signout')
